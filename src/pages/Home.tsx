@@ -1,6 +1,7 @@
 import { Button, Image } from 'antd';
 import { useEffect, useState } from 'react';
-import { useWindowSize } from '../utilities/use-window-size.utils';
+import { Link } from 'react-router-dom';
+import { useWindowSize } from 'src/utilities/use-window-size.utils';
 
 const Dashboard: React.FC = () => {
   const [imageSize, setImageSize] = useState<number>(200);
@@ -24,9 +25,11 @@ const Dashboard: React.FC = () => {
             preview={false}
             src='https://kmc-s3.sgp1.cdn.digitaloceanspaces.com/HDF/static/member.svg'
           />
-          <Button className='font-bold w-52' type='primary' size='large'>
-            Member
-          </Button>
+          <Link to='/member'>
+            <Button className='font-bold w-52' type='primary' size='large'>
+              Member
+            </Button>
+          </Link>
         </div>
         <div className='flex flex-col items-center justify-center gap-y-4'>
           <Image
@@ -35,9 +38,11 @@ const Dashboard: React.FC = () => {
             preview={false}
             src='https://kmc-s3.sgp1.cdn.digitaloceanspaces.com/HDF/static/event.svg'
           />
-          <Button className='font-bold w-52 ' type='primary' size='large'>
-            Event
-          </Button>
+          <Link to='/event'>
+            <Button className='font-bold w-52 ' type='primary' size='large'>
+              Event
+            </Button>
+          </Link>
         </div>
         <div className='flex flex-col items-center justify-center gap-y-4 '>
           <Image
@@ -46,9 +51,11 @@ const Dashboard: React.FC = () => {
             preview={false}
             src='https://kmc-s3.sgp1.cdn.digitaloceanspaces.com/HDF/static/visitor.svg'
           />
-          <Button className='font-bold w-52 ' type='primary' size='large'>
-            Guest
-          </Button>
+          <Link to='/guest'>
+            <Button className='font-bold w-52 ' type='primary' size='large'>
+              Guest
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

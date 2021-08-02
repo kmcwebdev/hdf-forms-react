@@ -6,7 +6,9 @@ module.exports = {
       screens: {
         xs: '320px',
       },
-      colors: {},
+      colors: {
+        'kmc-orange': '#f99d3a',
+      },
       fontFamily: {
         pop: ['Poppins'],
       },
