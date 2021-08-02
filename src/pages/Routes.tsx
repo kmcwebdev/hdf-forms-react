@@ -1,7 +1,9 @@
-import React, { lazy, Suspense } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import LazyLoad from 'src/components/Lazy-load';
 import Result from 'src/components/Result';
+import { useStore } from 'src/store';
+import { FormState } from 'src/utilities/interface/store.interface';
 
 const Home = lazy(() => import('./Home'));
 const Member = lazy(() => import('./member'));
@@ -9,6 +11,22 @@ const Event = lazy(() => import('./event'));
 const Guest = lazy(() => import('./guest'));
 
 const Routes: React.FC = () => {
+  const { setForm } = useStore();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const path = pathname.split('/').filter((path) => path)[0];
+    const transformPath = path.charAt(0).toUpperCase() + path.slice(1);
+
+    if (transformPath === 'Home') {
+      setForm(null);
+    }
+
+    if (transformPath !== 'Home') {
+      setForm(FormState[transformPath as FormState]);
+    }
+  }, [pathname, setForm]);
+
   return (
     <Suspense
       fallback={
@@ -28,7 +46,7 @@ const Routes: React.FC = () => {
             <Result
               status='404'
               title='Not Found'
-              subTitle='Page does not exists!'
+              subTitle='Seriously?'
               screenHeight
             />
           )}

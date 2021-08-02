@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Route, Switch } from 'react-router-dom';
 import Pages from './pages';
 
