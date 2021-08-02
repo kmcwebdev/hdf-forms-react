@@ -16,8 +16,8 @@ const Dashboard: React.FC = () => {
   }, [width]);
 
   return (
-    <div className='flex items-center p-10 overflow-hidden md:justify-center md:h-full'>
-      <div className='md:grid gap-y-10 md:gap-x-28 md:grid-cols-3'>
+    <div className='flex items-center justify-center p-10 md:h-screen'>
+      <div className='grid md:gap-x-28 md:grid-cols-3'>
         <div className='flex flex-col items-center justify-center gap-y-4'>
           <Image
             width={imageSize}

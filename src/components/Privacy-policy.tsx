@@ -103,13 +103,14 @@ const PrivacyPolicy: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className='mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense'>
+              <div className='grid gap-4 mt-6 md:grid-cols-2 md:mt-5'>
                 <Link to='/home'>
                   <Button className='w-full' size='large'>
                     Return to home
                   </Button>
                 </Link>
                 <Button
+                  className='w-full'
                   type='primary'
                   onClick={() => setOpen(false)}
                   size='large'
