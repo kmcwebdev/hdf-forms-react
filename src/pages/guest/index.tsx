@@ -56,8 +56,8 @@ const Guest: React.FC = () => {
           </div>
         </div>
       </PrivacyPolicy>
-      <div className='flex flex-col items-center'>
-        <div className='w-full p-10 space-y-4 md:w-2/4 md:p-8'>
+      <div className='flex flex-col items-center p-4 md:p-10'>
+        <div className='w-full space-y-4 md:w-2/4'>
           <Text className='text-2xl font-bold text-kmc-orange'>
             Guest Health Declaration
           </Text>
