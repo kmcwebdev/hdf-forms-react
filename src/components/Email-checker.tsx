@@ -1,5 +1,6 @@
 import MailOutlined from '@ant-design/icons/MailOutlined';
 import { Button, Form, Input } from 'antd';
+import { Link } from 'react-router-dom';
 import { useStore } from 'src/store';
 
 const EmailChecker: React.FC = () => {
@@ -17,9 +18,14 @@ const EmailChecker: React.FC = () => {
         <Input prefix={<MailOutlined className='text-gray-400' />} />
       </Form.Item>
       <Form.Item className='float-right'>
-        <Button type='primary' htmlType='submit'>
-          Submit
-        </Button>
+        <div className='flex gap-x-4'>
+          <Link to='/home'>
+            <Button>Go back</Button>
+          </Link>
+          <Button type='primary' htmlType='submit'>
+            Submit
+          </Button>
+        </div>
       </Form.Item>
     </Form>
   );
