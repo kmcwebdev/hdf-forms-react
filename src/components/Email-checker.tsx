@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import MailOutlined from '@ant-design/icons/MailOutlined';
 import { Button, Form, Input, message } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
 import { VisitorAPI } from 'src/services/api/visitor.api';
@@ -19,6 +19,7 @@ const EmailChecker: React.FC = () => {
     setShowForm,
   } = useStore();
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
+  let btnLoadingTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const IS_A_GUEST = pathState === FormState.Guest;
 
@@ -30,7 +31,7 @@ const EmailChecker: React.FC = () => {
         !mailDomainIs(visitor.email, 'kmc.solutions');
 
       if (IS_A_MEMBER) {
-        setTimeout(() => setShowForm(true), 2000);
+        btnLoadingTimeout.current = setTimeout(() => setShowForm(true), 2000);
       }
     },
     onMutate: (email) => {
@@ -43,13 +44,16 @@ const EmailChecker: React.FC = () => {
           3
         );
 
-        setTimeout(() => setBtnLoading(false), 1000);
+        btnLoadingTimeout.current = setTimeout(
+          () => setBtnLoading(false),
+          1000
+        );
       }
     },
     onError: (error: HttpError) => {
       message.error(ApiError(error), 2);
 
-      setTimeout(() => setBtnLoading(false), 1000);
+      btnLoadingTimeout.current = setTimeout(() => setBtnLoading(false), 1000);
     },
   });
 
@@ -70,7 +74,7 @@ const EmailChecker: React.FC = () => {
   }, [isLoading, data]);
 
   useEffect(() => {
-    return () => setBtnLoading(false);
+    return () => clearTimeout(btnLoadingTimeout.current!);
   }, []);
 
   return (
