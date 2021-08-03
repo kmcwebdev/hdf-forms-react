@@ -8,23 +8,48 @@ import { VisitorAPI } from 'src/services/api/visitor.api';
 import { HttpError } from 'src/services/http.service';
 import { useStore } from 'src/store';
 import { ApiError } from 'src/utilities/api-error.utils';
+import { FormState } from 'src/utilities/enum/form-state.enum';
+import { mailDomainIs } from 'src/utilities/mail-domain-is.utils';
 
 const EmailChecker: React.FC = () => {
-  const { personalInformation, setPersonalInformation, setShowForm } =
-    useStore();
-  const [email, setEmail] = useState<string>('');
+  const {
+    form: pathState,
+    setEmail,
+    setPersonalInformation,
+    setShowForm,
+  } = useStore();
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
+  const IS_A_GUEST = pathState === FormState.Guest;
+
   const { isLoading, data, mutateAsync } = useMutation(VisitorAPI.checkEmail, {
-    onSuccess: () => {
-      setTimeout(() => setShowForm(true), 2000);
+    onSuccess: (visitor) => {
+      const IS_A_MEMBER =
+        IS_A_GUEST &&
+        Object.keys(visitor).length &&
+        !mailDomainIs(visitor.email, 'kmc.solutions');
+
+      if (IS_A_MEMBER) {
+        setTimeout(() => setShowForm(true), 2000);
+      }
     },
     onMutate: (email) => {
       setEmail(email);
       setBtnLoading(true);
+
+      if (IS_A_GUEST && mailDomainIs(email, 'kmc.solutions')) {
+        message.warning(
+          "Please enter a valid email. If you are not a guest, please use our Member's Declaration Form",
+          3
+        );
+
+        setTimeout(() => setBtnLoading(false), 1000);
+      }
     },
     onError: (error: HttpError) => {
-      message.error(ApiError(error));
+      message.error(ApiError(error), 2);
+
+      setTimeout(() => setBtnLoading(false), 1000);
     },
   });
 
@@ -41,8 +66,6 @@ const EmailChecker: React.FC = () => {
         address,
         company,
       });
-    } else {
-      setPersonalInformation({ email });
     }
   }, [isLoading, data]);
 
@@ -61,7 +84,6 @@ const EmailChecker: React.FC = () => {
       <Form.Item
         label='Email'
         name='email'
-        initialValue={personalInformation?.email}
         rules={[{ required: true, message: 'Please input your email!' }]}
       >
         <Input prefix={<MailOutlined className='text-gray-400' />} />

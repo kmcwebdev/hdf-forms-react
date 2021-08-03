@@ -1,5 +1,5 @@
 import { Form, FormInstance, Input, Select } from 'antd';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { useQuery } from 'react-query';
 import { SiteAPI } from 'src/services/api/site.api';
 import { useStore } from 'src/store';
@@ -12,8 +12,7 @@ interface VisitInformationProps {
 }
 
 const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
-  const [siteId, setSiteId] = useState<number>(0);
-  const { form: pathState } = useStore();
+  const { form: pathState, siteId, setSiteId } = useStore();
 
   const { isLoading: isLoadingSites, data: sites } = useQuery({
     queryKey: 'sites',
@@ -23,7 +22,6 @@ const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
   const { isLoading: isLoadingFloors, data: floors } = useQuery({
     queryKey: ['floors', siteId],
     queryFn: () => SiteAPI.floors(siteId),
-    enabled: siteId ? true : false,
   });
 
   return (
