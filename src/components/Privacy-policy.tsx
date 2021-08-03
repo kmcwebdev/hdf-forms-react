@@ -3,8 +3,10 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Button } from 'antd';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useStore } from 'src/store';
 
 const PrivacyPolicy: React.FC = ({ children }) => {
+  const { setPersonalInformation, setAuthorized } = useStore();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -58,7 +60,14 @@ const PrivacyPolicy: React.FC = ({ children }) => {
               {children}
               <div className='grid gap-4 mt-6 md:grid-cols-2 md:mt-5'>
                 <Link to='/home'>
-                  <Button className='w-full' size='large'>
+                  <Button
+                    className='w-full'
+                    onClick={() => {
+                      setPersonalInformation(null);
+                      setAuthorized(false);
+                    }}
+                    size='large'
+                  >
                     Return to home
                   </Button>
                 </Link>

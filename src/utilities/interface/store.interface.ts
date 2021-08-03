@@ -1,24 +1,23 @@
+import { FormState } from '../enum/form-state.enum';
+import { WorkType } from '../enum/work-type.enum';
 import { PersonalInformation } from './personal-information.interface';
-
-export enum FormState {
-  Member = 'Member',
-  Event = 'Event',
-  Guest = 'Guest',
-}
-
-export enum WorkType {
-  'On site' = 'On site',
-  'Work from home' = 'Work from home',
-  'On leave' = 'On leave',
-}
+import { VisitInformation } from './visit-information.interface';
 
 export interface Store {
+  showForm: boolean;
+  setShowForm: (showForm: boolean) => void;
   form: FormState | null;
   setForm: (form: FormState | null) => void;
-  personalInformation: PersonalInformation | null;
-  setPersonalInformation: (personalDetails: PersonalInformation | null) => void;
+  personalInformation: Partial<PersonalInformation> | null;
+  setPersonalInformation: (
+    personalDetails: Partial<PersonalInformation> | null
+  ) => void;
   authorized: boolean;
   setAuthorized: (authorize: boolean) => void;
+  visitInformation: Partial<VisitInformation> | null;
+  setVisitInformation: (
+    visitInformation: Partial<VisitInformation> | null
+  ) => void;
   workLocation: WorkType | null;
   setWorkLocation: (workLocation: WorkType | null) => void;
 }

@@ -1,18 +1,67 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import MailOutlined from '@ant-design/icons/MailOutlined';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
+import { useEffect, useState } from 'react';
+import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
+import { VisitorAPI } from 'src/services/api/visitor.api';
+import { HttpError } from 'src/services/http.service';
 import { useStore } from 'src/store';
+import { ApiError } from 'src/utilities/api-error.utils';
 
 const EmailChecker: React.FC = () => {
-  const { form } = useStore();
+  const { personalInformation, setPersonalInformation, setShowForm } =
+    useStore();
+  const [email, setEmail] = useState<string>('');
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
-  console.log(form);
+  const { isLoading, data, mutateAsync } = useMutation(VisitorAPI.checkEmail, {
+    onSuccess: () => {
+      setTimeout(() => setShowForm(true), 2000);
+    },
+    onMutate: (email) => {
+      setEmail(email);
+      setBtnLoading(true);
+    },
+    onError: (error: HttpError) => {
+      message.error(ApiError(error));
+    },
+  });
+
+  useEffect(() => {
+    if (data && Object.keys(data).length > 1) {
+      const { firstName, lastName, email, phoneNumber, address, company } =
+        data;
+
+      setPersonalInformation({
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        address,
+        company,
+      });
+    } else {
+      setPersonalInformation({ email });
+    }
+  }, [isLoading, data]);
+
+  useEffect(() => {
+    return () => setBtnLoading(false);
+  }, []);
 
   return (
-    <Form name='email_check_form' layout='vertical'>
+    <Form<{ email: string }>
+      name='email_check_form'
+      onFinish={async (values) => {
+        await mutateAsync(values.email);
+      }}
+      layout='vertical'
+    >
       <Form.Item
         label='Email'
         name='email'
+        initialValue={personalInformation?.email}
         rules={[{ required: true, message: 'Please input your email!' }]}
       >
         <Input prefix={<MailOutlined className='text-gray-400' />} />
@@ -22,7 +71,11 @@ const EmailChecker: React.FC = () => {
           <Link to='/home'>
             <Button>Go back</Button>
           </Link>
-          <Button type='primary' htmlType='submit'>
+          <Button
+            type='primary'
+            loading={isLoading || btnLoading}
+            htmlType='submit'
+          >
             Submit
           </Button>
         </div>

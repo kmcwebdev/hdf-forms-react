@@ -3,7 +3,7 @@ import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import LazyLoad from 'src/components/Lazy-load';
 import Result from 'src/components/Result';
 import { useStore } from 'src/store';
-import { FormState } from 'src/utilities/interface/store.interface';
+import { FormState } from 'src/utilities/enum/form-state.enum';
 
 const Home = lazy(() => import('./Home'));
 const Member = lazy(() => import('./member'));
