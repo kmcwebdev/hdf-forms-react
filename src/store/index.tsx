@@ -8,7 +8,10 @@ export const useStore = create<Store>((set) => ({
   form: null,
   personalInformation: null,
   visitInformation: null,
-  symptoms: [],
+  symptoms: { questionId: 1, answers: ['None of the above'] },
+  hdfQ2: { questionId: 2, answers: ['No'] },
+  hdfQ3: { questionId: 3, answers: ['No'] },
+  hdfQ4: { questionId: 4, answers: ['No'] },
   authorized: false,
   siteId: 0,
   floorId: 0,
@@ -32,6 +35,15 @@ export const useStore = create<Store>((set) => ({
   },
   setSymptoms: (symptoms) => {
     return set((state) => ({ ...state, symptoms }));
+  },
+  setHdfQ2: (hdfQ2) => {
+    return set((state) => ({ ...state, hdfQ2 }));
+  },
+  setHdfQ3: (hdfQ3) => {
+    return set((state) => ({ ...state, hdfQ3 }));
+  },
+  setHdfQ4: (hdfQ4) => {
+    return set((state) => ({ ...state, hdfQ4 }));
   },
   setAuthorized: (authorize) => {
     return set((state) => ({ ...state, authorized: authorize }));

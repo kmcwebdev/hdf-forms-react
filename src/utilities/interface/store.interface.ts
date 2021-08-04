@@ -1,7 +1,7 @@
-import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { FormState } from '../enum/form-state.enum';
 import { WorkType } from '../enum/work-type.enum';
 import { PersonalInformation } from './personal-information.interface';
+import { QResponse } from './question.interface';
 import { VisitInformation } from './visit-information.interface';
 
 export interface Store {
@@ -11,7 +11,10 @@ export interface Store {
   form: FormState | null;
   personalInformation: Partial<PersonalInformation> | null;
   visitInformation: VisitInformation | null;
-  symptoms: CheckboxValueType[];
+  symptoms: QResponse;
+  hdfQ2: QResponse;
+  hdfQ3: QResponse;
+  hdfQ4: QResponse;
   authorized: boolean;
   siteId: number;
   floorId: number;
@@ -25,7 +28,10 @@ export interface Store {
     personalDetails: Partial<PersonalInformation> | null
   ) => void;
   setVisitInformation: (visitInformation: VisitInformation | null) => void;
-  setSymptoms: (symptoms: CheckboxValueType[]) => void;
+  setSymptoms: (symptoms: QResponse) => void;
+  setHdfQ2: (hdfQ2: QResponse) => void;
+  setHdfQ3: (hdfQ3: QResponse) => void;
+  setHdfQ4: (hdfQ4: QResponse) => void;
   setAuthorized: (authorize: boolean) => void;
   setSiteId: (siteId: number) => void;
   setFloorId: (floorId: number) => void;

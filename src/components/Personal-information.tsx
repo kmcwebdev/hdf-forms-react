@@ -40,7 +40,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ form }) => {
     >
       <Form.Item
         label='Date of visit'
-        name='dateOfVisit'
+        name='visitDate'
         initialValue={new Date()}
       >
         <DatePicker className='w-full' format='YYYY/MM/DD' disabled />

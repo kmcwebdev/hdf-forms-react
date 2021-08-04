@@ -1,9 +1,10 @@
-import { Checkbox, Radio, RadioChangeEvent } from 'antd';
+import { Checkbox, Radio, RadioChangeEvent, Skeleton } from 'antd';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { Fragment } from 'react';
 import { useQuery } from 'react-query';
 import { QuestionAPI } from 'src/services/api/question.api';
 import { useStore } from 'src/store';
+import { FormState } from 'src/utilities/enum/form-state.enum';
 import { Text } from './Text';
 
 interface HealthDeclarationProps {
@@ -11,7 +12,17 @@ interface HealthDeclarationProps {
 }
 
 const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
-  const { symptoms, setSymptoms } = useStore();
+  const {
+    form,
+    symptoms,
+    setSymptoms,
+    hdfQ2,
+    setHdfQ2,
+    hdfQ3,
+    setHdfQ3,
+    hdfQ4,
+    setHdfQ4,
+  } = useStore();
 
   const { isLoading, data } = useQuery({
     queryKey: 'questions',
@@ -19,15 +30,23 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
   });
 
   function symptomsOnChange(checkedValues: CheckboxValueType[]) {
-    setSymptoms(checkedValues);
+    setSymptoms({ questionId: 1, answers: checkedValues });
   }
 
-  function HealthDeclarationOnChange(radioValues: RadioChangeEvent) {
-    console.log(radioValues.target.value);
+  function HealthDeclarationOnChangeQ2(radioValues: RadioChangeEvent) {
+    setHdfQ2({ questionId: 2, answers: [radioValues.target.value] });
+  }
+
+  function HealthDeclarationOnChangeQ3(radioValues: RadioChangeEvent) {
+    setHdfQ3({ questionId: 3, answers: [radioValues.target.value] });
+  }
+
+  function HealthDeclarationOnChangeQ4(radioValues: RadioChangeEvent) {
+    setHdfQ4({ questionId: 4, answers: [radioValues.target.value] });
   }
 
   return (
-    <Fragment>
+    <Skeleton loading={isLoading}>
       {step === 2 && (
         <Fragment>
           <div className='mb-5'>
@@ -35,7 +54,7 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
           </div>
           <Checkbox.Group
             className='flex flex-col gap-y-4'
-            defaultValue={symptoms}
+            defaultValue={symptoms.answers}
             onChange={symptomsOnChange}
           >
             {data &&
@@ -45,7 +64,7 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
                     value={answer}
                     disabled={
                       answer !== 'None of the above' &&
-                      symptoms.includes('None of the above')
+                      symptoms.answers.includes('None of the above')
                     }
                   >
                     {answer}
@@ -62,8 +81,8 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
               <Text className='text-base'>{data && data[1].question}</Text>
             </div>
             <Radio.Group
-              onChange={HealthDeclarationOnChange}
-              defaultValue='Yes'
+              onChange={HealthDeclarationOnChangeQ2}
+              defaultValue={hdfQ2.answers[0]}
             >
               {data &&
                 data[1].answers.map(({ id, answer }) => (
@@ -78,8 +97,8 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
               <Text className='text-base'>{data && data[2].question}</Text>
             </div>
             <Radio.Group
-              onChange={HealthDeclarationOnChange}
-              defaultValue='Yes'
+              onChange={HealthDeclarationOnChangeQ3}
+              defaultValue={hdfQ3.answers[0]}
             >
               {data &&
                 data[2].answers.map(({ id, answer }) => (
@@ -94,8 +113,8 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
               <Text className='text-base'>{data && data[3].question}</Text>
             </div>
             <Radio.Group
-              onChange={HealthDeclarationOnChange}
-              defaultValue='Yes'
+              onChange={HealthDeclarationOnChangeQ4}
+              defaultValue={hdfQ4.answers[0]}
             >
               {data &&
                 data[3].answers.map(({ id, answer }) => (
@@ -107,7 +126,25 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
           </div>
         </div>
       )}
-    </Fragment>
+      {step === 4 && (
+        <div className='space-y-6'>
+          {form === FormState.Guest && (
+            <p className='text-base font-medium text-justify'>
+              All visitor requests are subject for approval by the person in
+              charge of the visit. Failure to receive a response will be
+              considered as invalid.
+            </p>
+          )}
+          <p className='text-base font-medium text-justify'>
+            If you answer "NO" to all of the above, you warrant that you do not
+            suffer from any COVID-19 symptoms nor have any reasonable belief of
+            contracting COVID-19 based on your current social activities. Such
+            warranty shall be the basis for your entry within the facility and
+            the same shall be used against you in case of misdeclaration.
+          </p>
+        </div>
+      )}
+    </Skeleton>
   );
 };
 

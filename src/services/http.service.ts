@@ -1,23 +1,9 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { sanitizeObjProperty } from 'src/utilities/sanitize-obj-property.utils';
 
 export interface HttpError extends AxiosError {}
 
-const removedUndefinedProperty = <T extends object>(obj: T) => {
-  for (let key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const IS_NOTHING =
-        obj[key] === undefined ||
-        obj[key] === null ||
-        String(obj[key])?.length === 0;
-
-      if (IS_NOTHING) {
-        delete obj[key];
-      }
-    }
-  }
-};
-
-export default removedUndefinedProperty;
+export default sanitizeObjProperty;
 
 export const makeRequest = async <T>(
   config: AxiosRequestConfig
@@ -26,7 +12,7 @@ export const makeRequest = async <T>(
     config.baseURL = process.env.REACT_APP_API_BASE_URL;
   }
 
-  config.withCredentials = true;
+  //config.withCredentials = true;
   axios.defaults.headers['Content-Type'] = 'application/json';
   axios.defaults.headers['charset'] = 'utf-8';
 
@@ -39,7 +25,7 @@ export const makeRequest = async <T>(
 
 axios.interceptors.request.use(
   (request: AxiosRequestConfig) => {
-    removedUndefinedProperty(request.params);
+    sanitizeObjProperty(request.params);
 
     return request;
   },

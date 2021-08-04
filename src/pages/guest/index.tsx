@@ -1,6 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import { Button, Form, Space, Steps } from 'antd';
 import { Fragment, useState } from 'react';
+import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
 import EmailChecker from 'src/components/Email-checker';
 import HealthDeclaration from 'src/components/Health-declaration';
@@ -8,18 +9,26 @@ import PersonalInformation from 'src/components/Personal-information';
 import PrivacyPolicy from 'src/components/Privacy-policy';
 import { Text } from 'src/components/Text';
 import VisitInformation from 'src/components/Visit-information';
+import { GuestAPI } from 'src/services/api/guest.api';
 import { useStore } from 'src/store';
 import { FormState } from 'src/utilities/enum/form-state.enum';
 import { PersonalInformation as IPersonalInformation } from 'src/utilities/interface/personal-information.interface';
 import { VisitInformation as IVisitInformation } from 'src/utilities/interface/visit-information.interface';
+import { sanitizeObjProperty } from 'src/utilities/sanitize-obj-property.utils';
 
 const { Step } = Steps;
 
 const Guest: React.FC = () => {
   const {
     email,
+    personalInformation,
     setPersonalInformation,
+    visitInformation,
     setVisitInformation,
+    symptoms,
+    hdfQ2,
+    hdfQ3,
+    hdfQ4,
     authorized,
     showForm,
     form: pathState,
@@ -29,22 +38,28 @@ const Guest: React.FC = () => {
 
   const steps = [
     {
-      title: <Text className='text-sm'>Personal details</Text>,
+      title: <Text className='text-xs'>Personal details</Text>,
       content: <PersonalInformation form={form} />,
     },
     {
-      title: <Text className='text-sm'>Visit details</Text>,
+      title: <Text className='text-xs'>Visit details</Text>,
       content: <VisitInformation form={form} />,
     },
     {
-      title: <Text className='text-sm'>Symptoms</Text>,
+      title: <Text className='text-xs'>Symptoms</Text>,
       content: <HealthDeclaration step={current} />,
     },
     {
-      title: <Text className='text-sm'>Health declaration</Text>,
+      title: <Text className='text-xs'>Health declaration</Text>,
+      content: <HealthDeclaration step={current} />,
+    },
+    {
+      title: <Text className='text-xs'>Terms and condition</Text>,
       content: <HealthDeclaration step={current} />,
     },
   ];
+
+  const { mutateAsync } = useMutation(GuestAPI.createVisit, {});
 
   async function next() {
     await form.validateFields();
@@ -68,6 +83,18 @@ const Guest: React.FC = () => {
 
   function prev() {
     setCurrent(current - 1);
+  }
+
+  async function createGuestVisit() {
+    const payload = sanitizeObjProperty({
+      ...personalInformation,
+      ...visitInformation,
+      questions: [symptoms, hdfQ2, hdfQ3, hdfQ4],
+      visitDate: undefined,
+      authorized: undefined,
+    });
+
+    await mutateAsync(payload);
   }
 
   return (
@@ -153,7 +180,7 @@ const Guest: React.FC = () => {
                   <Step key={idx} title={item.title} />
                 ))}
               </Steps>
-              <div className='steps-content'>{steps[current].content}</div>
+              <div>{steps[current].content}</div>
               <div className='float-right steps-action'>
                 {current < steps.length - 1 && (
                   <Button
@@ -166,7 +193,9 @@ const Guest: React.FC = () => {
                   </Button>
                 )}
                 {current === steps.length - 1 && (
-                  <Button type='primary'>Done</Button>
+                  <Button type='primary' onClick={createGuestVisit}>
+                    Submit
+                  </Button>
                 )}
                 {current > 0 && (
                   <Button className='ml-2 w-28' onClick={() => prev()}>
