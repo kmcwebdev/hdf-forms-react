@@ -4,6 +4,7 @@ import { useQuery } from 'react-query';
 import { SiteAPI } from 'src/services/api/site.api';
 import { useStore } from 'src/store';
 import { FormState } from 'src/utilities/enum/form-state.enum';
+import { validateEmail } from 'src/utilities/validate-email.utils';
 
 const { Option } = Select;
 
@@ -76,6 +77,16 @@ const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
             name='pocEmail'
             rules={[
               { required: true, message: 'Please input the email of poc!' },
+              () => ({
+                validator(_, value) {
+                  if (!value || validateEmail(value)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error('Please input a valid email!')
+                  );
+                },
+              }),
             ]}
           >
             <Input />

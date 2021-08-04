@@ -5,11 +5,12 @@ export interface HttpError extends AxiosError {}
 const removedUndefinedProperty = <T extends object>(obj: T) => {
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      if (
+      const IS_NOTHING =
         obj[key] === undefined ||
         obj[key] === null ||
-        String(obj[key])?.length === 0
-      ) {
+        String(obj[key])?.length === 0;
+
+      if (IS_NOTHING) {
         delete obj[key];
       }
     }

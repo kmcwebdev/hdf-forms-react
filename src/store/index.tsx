@@ -7,6 +7,8 @@ export const useStore = create<Store>((set) => ({
   showForm: false,
   form: null,
   personalInformation: null,
+  visitInformation: null,
+  symptoms: [],
   authorized: false,
   siteId: 0,
   floorId: 0,
@@ -24,6 +26,12 @@ export const useStore = create<Store>((set) => ({
   },
   setPersonalInformation: (personalInformation) => {
     return set((state) => ({ ...state, personalInformation }));
+  },
+  setVisitInformation: (visitInformation) => {
+    return set((state) => ({ ...state, visitInformation }));
+  },
+  setSymptoms: (symptoms) => {
+    return set((state) => ({ ...state, symptoms }));
   },
   setAuthorized: (authorize) => {
     return set((state) => ({ ...state, authorized: authorize }));

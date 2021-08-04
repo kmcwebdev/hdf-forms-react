@@ -10,6 +10,7 @@ import { useStore } from 'src/store';
 import { ApiError } from 'src/utilities/api-error.utils';
 import { FormState } from 'src/utilities/enum/form-state.enum';
 import { mailDomainIs } from 'src/utilities/mail-domain-is.utils';
+import { validateEmail } from 'src/utilities/validate-email.utils';
 
 const EmailChecker: React.FC = () => {
   const {
@@ -88,7 +89,17 @@ const EmailChecker: React.FC = () => {
       <Form.Item
         label='Email'
         name='email'
-        rules={[{ required: true, message: 'Please input your email!' }]}
+        rules={[
+          { required: true, message: 'Please input your email!' },
+          () => ({
+            validator(_, value) {
+              if (!value || validateEmail(value)) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('Please input a valid email!'));
+            },
+          }),
+        ]}
       >
         <Input prefix={<MailOutlined className='text-gray-400' />} />
       </Form.Item>

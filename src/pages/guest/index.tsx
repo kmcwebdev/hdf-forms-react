@@ -10,11 +10,20 @@ import { Text } from 'src/components/Text';
 import VisitInformation from 'src/components/Visit-information';
 import { useStore } from 'src/store';
 import { FormState } from 'src/utilities/enum/form-state.enum';
+import { PersonalInformation as IPersonalInformation } from 'src/utilities/interface/personal-information.interface';
+import { VisitInformation as IVisitInformation } from 'src/utilities/interface/visit-information.interface';
 
 const { Step } = Steps;
 
 const Guest: React.FC = () => {
-  const { authorized, showForm, form: pathState } = useStore();
+  const {
+    email,
+    setPersonalInformation,
+    setVisitInformation,
+    authorized,
+    showForm,
+    form: pathState,
+  } = useStore();
   const [form] = Form.useForm();
   const [current, setCurrent] = useState(0);
 
@@ -28,13 +37,31 @@ const Guest: React.FC = () => {
       content: <VisitInformation form={form} />,
     },
     {
+      title: <Text className='text-sm'>Symptoms</Text>,
+      content: <HealthDeclaration step={current} />,
+    },
+    {
       title: <Text className='text-sm'>Health declaration</Text>,
-      content: <HealthDeclaration form={form} step={current} />,
+      content: <HealthDeclaration step={current} />,
     },
   ];
 
   async function next() {
     await form.validateFields();
+
+    const values = await form.getFieldsValue();
+
+    if (current === 0) {
+      const data = values as IPersonalInformation;
+
+      setPersonalInformation({ ...data, email: email! });
+    }
+
+    if (current === 1) {
+      const data = values as IVisitInformation;
+
+      setVisitInformation(data);
+    }
 
     setCurrent(current + 1);
   }

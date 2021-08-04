@@ -5,4 +5,5 @@ export interface PersonalInformation {
   phoneNumber: string;
   company: string;
   address: string;
+  city: string;
 }
