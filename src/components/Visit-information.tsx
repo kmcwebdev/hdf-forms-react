@@ -1,6 +1,7 @@
 import { Form, FormInstance, Input, Select } from 'antd';
 import { Fragment } from 'react';
 import { useQuery } from 'react-query';
+import { LeaveTypeAPI } from 'src/services/api/leave-type.api';
 import { SiteAPI } from 'src/services/api/site.api';
 import { useStore } from 'src/store';
 import { FormState } from 'src/utilities/enum/form-state.enum';
@@ -15,19 +16,32 @@ interface VisitInformationProps {
 const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
   const { form: pathState, workType, siteId, setSiteId } = useStore();
 
+  const NOT_WFH_OR_ON_LEAVE =
+    workType?.type !== 'Working from home' && workType?.type !== 'On leave';
+
+  const IS_ON_LEAVE = workType?.type === 'On leave';
+
   const { isLoading: isLoadingSites, data: sites } = useQuery({
     queryKey: 'sites',
     queryFn: SiteAPI.sites,
+    enabled: NOT_WFH_OR_ON_LEAVE ? true : false,
   });
 
   const { isLoading: isLoadingFloors, data: floors } = useQuery({
     queryKey: ['floors', siteId],
     queryFn: () => SiteAPI.floors(siteId),
+    enabled: NOT_WFH_OR_ON_LEAVE ? true : false,
+  });
+
+  const { isLoading: isLoadingLeaveTypes, data: leaveTypes } = useQuery({
+    queryKey: 'leaveTypes',
+    queryFn: LeaveTypeAPI.getLeaveTypes,
+    enabled: IS_ON_LEAVE ? true : false,
   });
 
   return (
     <Form name='visit_information_form' form={form} layout='vertical'>
-      {workType?.type !== 'Working from home' && workType?.type !== 'On leave' && (
+      {NOT_WFH_OR_ON_LEAVE && (
         <Fragment>
           <Form.Item
             label='KMC branch'
@@ -67,24 +81,16 @@ const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
           </Form.Item>
         </Fragment>
       )}
-      {workType?.type === 'On leave' && (
+      {IS_ON_LEAVE && (
         <Form.Item
           label='Leave type'
           name='leaveTypeId'
-          rules={[{ required: true, message: 'Please select a KMC branch!' }]}
+          rules={[{ required: true, message: 'Please select a leave type!' }]}
         >
-          <Select
-            className='w-full'
-            onChange={(_: number, options) => {
-              const { value } = options as { value: number };
-
-              setSiteId(value);
-            }}
-            loading={isLoadingSites}
-          >
-            {sites?.map((site) => (
-              <Option key={site.siteId} value={site.siteId}>
-                {site.siteName}
+          <Select className='w-full' loading={isLoadingLeaveTypes}>
+            {leaveTypes?.map((leave) => (
+              <Option key={leave.id} value={leave.id}>
+                {leave.type}
               </Option>
             ))}
           </Select>

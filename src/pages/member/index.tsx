@@ -1,6 +1,6 @@
 import { Button, Form, Space, Steps } from 'antd';
 import classnames from 'classnames';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import EmailChecker from 'src/components/Email-checker';
 import HealthDeclaration from 'src/components/Health-declaration';
 import PersonalInformation from 'src/components/Personal-information';
@@ -10,6 +10,7 @@ import { useStore } from 'src/store';
 import { FormState } from 'src/utilities/enum/form-state.enum';
 import { PersonalInformation as IPersonalInformation } from 'src/utilities/interface/personal-information.interface';
 import { VisitInformation as IVisitInformation } from 'src/utilities/interface/visit-information.interface';
+import { sanitizeObjProperty } from 'src/utilities/sanitize-obj-property.utils';
 import WorkType from './work-type';
 
 const { Step } = Steps;
@@ -38,6 +39,12 @@ const Member: React.FC = () => {
   let btnLoadingTimeout = useRef<ReturnType<typeof setTimeout>>(
     setTimeout(() => null, 100)
   );
+
+  useEffect(() => {
+    console.log(setStepsDone);
+    console.log(setResultLoading);
+    console.log(btnLoadingTimeout);
+  }, []);
 
   const steps = [
     {
@@ -96,6 +103,24 @@ const Member: React.FC = () => {
     setCurrent(current - step);
   }
 
+  // Manual!!!
+  async function createMemberVisit() {
+    const payload = sanitizeObjProperty({
+      ...personalInformation,
+      ...visitInformation,
+      workTypeId: workType?.id,
+      questions: [symptoms, hdfQ2, hdfQ3, hdfQ4],
+      siteId:
+        workType?.type === 'On site' ? visitInformation?.siteId : undefined,
+      floorId:
+        workType?.type === 'On site' ? visitInformation?.floorId : undefined,
+      visitDate: undefined,
+      authorized: undefined,
+    });
+
+    console.log(payload);
+  }
+
   return (
     <div className='flex flex-col items-center p-4 md:p-10'>
       <div
@@ -142,7 +167,13 @@ const Member: React.FC = () => {
                 </Button>
               )}
               {current === steps.length - 1 && (
-                <Button type='primary'>Submit</Button>
+                <Button
+                  type='primary'
+                  loading={resultLoading}
+                  onClick={createMemberVisit}
+                >
+                  Submit
+                </Button>
               )}
               {current > 0 && (
                 <Button className='ml-2 w-28' onClick={() => prev()}>
