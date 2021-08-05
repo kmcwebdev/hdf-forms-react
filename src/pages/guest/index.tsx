@@ -1,6 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import { Button, Form, Space, Steps } from 'antd';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
 import EmailChecker from 'src/components/Email-checker';
@@ -15,6 +15,7 @@ import { FormState } from 'src/utilities/enum/form-state.enum';
 import { PersonalInformation as IPersonalInformation } from 'src/utilities/interface/personal-information.interface';
 import { VisitInformation as IVisitInformation } from 'src/utilities/interface/visit-information.interface';
 import { sanitizeObjProperty } from 'src/utilities/sanitize-obj-property.utils';
+import VisitStatus from './visit-status';
 
 const { Step } = Steps;
 
@@ -35,6 +36,12 @@ const Guest: React.FC = () => {
   } = useStore();
   const [form] = Form.useForm();
   const [current, setCurrent] = useState(0);
+  const [stepsDone, setStepsDone] = useState(false);
+  const [resultLoading, setResultLoading] = useState(false);
+
+  let btnLoadingTimeout = useRef<ReturnType<typeof setTimeout>>(
+    setTimeout(() => null, 100)
+  );
 
   const steps = [
     {
@@ -59,7 +66,24 @@ const Guest: React.FC = () => {
     },
   ];
 
-  const { mutateAsync } = useMutation(GuestAPI.createVisit, {});
+  const {
+    mutateAsync,
+    isLoading: isLoadingCreateGuestVisit,
+    data,
+  } = useMutation(GuestAPI.createVisit, {});
+
+  useEffect(() => {
+    if (data) {
+      setResultLoading(true);
+      btnLoadingTimeout.current = setTimeout(() => {
+        setStepsDone(true);
+      }, 2500);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    return () => clearTimeout(btnLoadingTimeout.current);
+  }, []);
 
   async function next() {
     await form.validateFields();
@@ -148,7 +172,8 @@ const Guest: React.FC = () => {
       </PrivacyPolicy>
       <div className='flex flex-col items-center p-4 md:p-10'>
         <div className='w-full space-y-4 md:w-2/4'>
-          {!showForm && (
+          {stepsDone && <VisitStatus />}
+          {!showForm && !stepsDone && (
             <Fragment>
               <Text className='text-2xl font-bold text-kmc-orange'>
                 Guest Health Declaration
@@ -173,7 +198,7 @@ const Guest: React.FC = () => {
               <EmailChecker />
             </Fragment>
           )}
-          {showForm && pathState === FormState.Guest && (
+          {showForm && pathState === FormState.Guest && !stepsDone && (
             <Fragment>
               <Steps current={current} responsive>
                 {steps.map((item, idx) => (
@@ -193,7 +218,11 @@ const Guest: React.FC = () => {
                   </Button>
                 )}
                 {current === steps.length - 1 && (
-                  <Button type='primary' onClick={createGuestVisit}>
+                  <Button
+                    type='primary'
+                    loading={isLoadingCreateGuestVisit || resultLoading}
+                    onClick={createGuestVisit}
+                  >
                     Submit
                   </Button>
                 )}

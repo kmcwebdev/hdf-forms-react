@@ -20,39 +20,22 @@ const EmailChecker: React.FC = () => {
     setShowForm,
   } = useStore();
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
-  let btnLoadingTimeout = useRef<ReturnType<typeof setTimeout>>();
+  let btnLoadingTimeout = useRef<ReturnType<typeof setTimeout>>(
+    setTimeout(() => null, 100)
+  );
 
   const IS_A_GUEST = pathState === FormState.Guest;
 
   const { isLoading, data, mutateAsync } = useMutation(VisitorAPI.checkEmail, {
-    onSuccess: (visitor) => {
-      const IS_A_MEMBER =
-        IS_A_GUEST &&
-        Object.keys(visitor).length &&
-        !mailDomainIs(visitor.email, 'kmc.solutions');
-
-      if (IS_A_MEMBER) {
-        btnLoadingTimeout.current = setTimeout(() => setShowForm(true), 2000);
-      }
+    onSuccess: () => {
+      btnLoadingTimeout.current = setTimeout(() => setShowForm(true), 2000);
     },
     onMutate: (email) => {
       setEmail(email);
       setBtnLoading(true);
-
-      if (IS_A_GUEST && mailDomainIs(email, 'kmc.solutions')) {
-        message.warning(
-          "Please enter a valid email. If you are not a guest, please use our Member's Declaration Form",
-          3
-        );
-
-        btnLoadingTimeout.current = setTimeout(
-          () => setBtnLoading(false),
-          1000
-        );
-      }
     },
     onError: (error: HttpError) => {
-      message.error(ApiError(error), 2);
+      message.error(ApiError(error), 5);
 
       btnLoadingTimeout.current = setTimeout(() => setBtnLoading(false), 1000);
     },
@@ -75,14 +58,27 @@ const EmailChecker: React.FC = () => {
   }, [isLoading, data]);
 
   useEffect(() => {
-    return () => clearTimeout(btnLoadingTimeout.current!);
+    return () => clearTimeout(btnLoadingTimeout.current);
   }, []);
 
   return (
     <Form<{ email: string }>
       name='email_check_form'
       onFinish={async (values) => {
-        await mutateAsync(values.email);
+        const { email } = values;
+
+        const IS_A_MEMBER = IS_A_GUEST && mailDomainIs(email, 'kmc.solutions');
+
+        if (!IS_A_MEMBER) {
+          await mutateAsync(values.email);
+        }
+
+        if (IS_A_MEMBER) {
+          message.warning(
+            "Please enter a valid email. If you are not a guest, please use our Member's Declaration Form",
+            3
+          );
+        }
       }}
       layout='vertical'
     >
