@@ -82,7 +82,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ form }) => {
       </Form.Item>
       <Form.Item
         label='Have you traveled to any other cities outside of your city of residence/work? If yes, please list.'
-        name='city'
+        name='travelLocations'
       >
         <Input />
       </Form.Item>
