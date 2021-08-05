@@ -12,7 +12,6 @@ export const makeRequest = async <T>(
     config.baseURL = process.env.REACT_APP_API_BASE_URL;
   }
 
-  //config.withCredentials = true;
   axios.defaults.headers['Content-Type'] = 'application/json';
   axios.defaults.headers['charset'] = 'utf-8';
 

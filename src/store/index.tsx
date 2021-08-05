@@ -15,7 +15,7 @@ export const useStore = create<Store>((set) => ({
   authorized: false,
   siteId: 0,
   floorId: 0,
-  workLocation: null,
+  workType: null,
 
   // Actions
   setEmail: (email) => {
@@ -54,7 +54,7 @@ export const useStore = create<Store>((set) => ({
   setFloorId: (floorId: number) => {
     return set((state) => ({ ...state, floorId }));
   },
-  setWorkLocation: (workLocation) => {
-    return set((state) => ({ ...state, workLocation }));
+  setWorkType: (workType) => {
+    return set((state) => ({ ...state, workType }));
   },
 }));

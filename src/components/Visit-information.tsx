@@ -13,7 +13,7 @@ interface VisitInformationProps {
 }
 
 const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
-  const { form: pathState, siteId, setSiteId } = useStore();
+  const { form: pathState, workType, siteId, setSiteId } = useStore();
 
   const { isLoading: isLoadingSites, data: sites } = useQuery({
     queryKey: 'sites',
@@ -27,40 +27,69 @@ const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
 
   return (
     <Form name='visit_information_form' form={form} layout='vertical'>
-      <Form.Item
-        label='KMC branch'
-        name='siteId'
-        rules={[{ required: true, message: 'Please select a KMC branch!' }]}
-      >
-        <Select
-          className='w-full'
-          onChange={(_: number, options) => {
-            const { value } = options as { value: number };
+      {workType?.type !== 'Working from home' && workType?.type !== 'On leave' && (
+        <Fragment>
+          <Form.Item
+            label='KMC branch'
+            name='siteId'
+            rules={[{ required: true, message: 'Please select a KMC branch!' }]}
+          >
+            <Select
+              className='w-full'
+              onChange={(_: number, options) => {
+                const { value } = options as { value: number };
 
-            setSiteId(value);
-          }}
-          loading={isLoadingSites}
+                setSiteId(value);
+              }}
+              loading={isLoadingSites}
+            >
+              {sites?.map((site) => (
+                <Option key={site.siteId} value={site.siteId}>
+                  {site.siteName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            label='Floor'
+            name='floorId'
+            rules={[
+              { required: true, message: 'Please select a branch floor!' },
+            ]}
+          >
+            <Select className='w-full' loading={isLoadingFloors}>
+              {floors?.map((data) => (
+                <Option key={data.floorId} value={data.floorId}>
+                  {data.floor}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Fragment>
+      )}
+      {workType?.type === 'On leave' && (
+        <Form.Item
+          label='Leave type'
+          name='leaveTypeId'
+          rules={[{ required: true, message: 'Please select a KMC branch!' }]}
         >
-          {sites?.map((site) => (
-            <Option key={site.siteId} value={site.siteId}>
-              {site.siteName}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label='Floor'
-        name='floorId'
-        rules={[{ required: true, message: 'Please select a branch floor!' }]}
-      >
-        <Select className='w-full' loading={isLoadingFloors}>
-          {floors?.map((data) => (
-            <Option key={data.floorId} value={data.floorId}>
-              {data.floor}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
+          <Select
+            className='w-full'
+            onChange={(_: number, options) => {
+              const { value } = options as { value: number };
+
+              setSiteId(value);
+            }}
+            loading={isLoadingSites}
+          >
+            {sites?.map((site) => (
+              <Option key={site.siteId} value={site.siteId}>
+                {site.siteName}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+      )}
       {pathState === FormState.Guest && (
         <Fragment>
           <Form.Item

@@ -7,7 +7,7 @@ const PrivacyPolicy: React.FC = ({ children }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const timeOut = setTimeout(() => setOpen(true), 1000);
+    const timeOut = setTimeout(() => setOpen(true), 500);
 
     return () => clearTimeout(timeOut);
   }, []);

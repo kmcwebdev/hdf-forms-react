@@ -24,6 +24,17 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
     setHdfQ4,
   } = useStore();
 
+  //Manual fixed
+  let SYMPTOMS = 2;
+  let HEALTH_DEC = 3;
+  let T_AND_C = 4;
+
+  if (form === FormState.Member) {
+    SYMPTOMS = 3;
+    HEALTH_DEC = 4;
+    T_AND_C = 5;
+  }
+
   const { isLoading, data } = useQuery({
     queryKey: 'questions',
     queryFn: QuestionAPI.questions,
@@ -47,7 +58,7 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
 
   return (
     <Skeleton loading={isLoading}>
-      {step === 2 && (
+      {step === SYMPTOMS && (
         <Fragment>
           <div className='mb-5'>
             <Text className='text-base'>{data && data[0].question}</Text>
@@ -74,7 +85,7 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
           </Checkbox.Group>
         </Fragment>
       )}
-      {step === 3 && (
+      {step === HEALTH_DEC && (
         <div className='space-y-10'>
           <div>
             <div className='mb-5'>
@@ -126,7 +137,7 @@ const HealthDeclaration: React.FC<HealthDeclarationProps> = ({ step }) => {
           </div>
         </div>
       )}
-      {step === 4 && (
+      {step === T_AND_C && (
         <div className='space-y-6'>
           {form === FormState.Guest && (
             <p className='text-base font-medium text-justify'>

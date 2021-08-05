@@ -1,5 +1,5 @@
 import { Dialog } from '@headlessui/react';
-import { Button, Form, Space, Steps } from 'antd';
+import { Button, Form, message, Space, Steps } from 'antd';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,9 @@ import PrivacyPolicy from 'src/components/Privacy-policy';
 import { Text } from 'src/components/Text';
 import VisitInformation from 'src/components/Visit-information';
 import { GuestAPI } from 'src/services/api/guest.api';
+import { HttpError } from 'src/services/http.service';
 import { useStore } from 'src/store';
+import { ApiError } from 'src/utilities/api-error.utils';
 import { FormState } from 'src/utilities/enum/form-state.enum';
 import { PersonalInformation as IPersonalInformation } from 'src/utilities/interface/personal-information.interface';
 import { VisitInformation as IVisitInformation } from 'src/utilities/interface/visit-information.interface';
@@ -66,20 +68,22 @@ const Guest: React.FC = () => {
     },
   ];
 
-  const {
-    mutateAsync,
-    isLoading: isLoadingCreateGuestVisit,
-    data,
-  } = useMutation(GuestAPI.createVisit, {});
-
-  useEffect(() => {
-    if (data) {
-      setResultLoading(true);
-      btnLoadingTimeout.current = setTimeout(() => {
-        setStepsDone(true);
-      }, 2500);
+  const { mutateAsync, isLoading: isLoadingCreateGuestVisit } = useMutation(
+    GuestAPI.createVisit,
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setResultLoading(true);
+          btnLoadingTimeout.current = setTimeout(() => {
+            setStepsDone(true);
+          }, 2500);
+        }
+      },
+      onError: (error: HttpError) => {
+        message.error(ApiError(error));
+      },
     }
-  }, [data]);
+  );
 
   useEffect(() => {
     return () => clearTimeout(btnLoadingTimeout.current);

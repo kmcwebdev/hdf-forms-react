@@ -1,8 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Image, Space } from 'antd';
+import { useEffect } from 'react';
 import { Link as ReactRouterDomLink } from 'react-router-dom';
 import { Link, Text } from 'src/components/Text';
+import { useStore } from 'src/store';
 
 const VisitStatus: React.FC = () => {
+  const {
+    setForm,
+    setShowForm,
+    setEmail,
+    setPersonalInformation,
+    setAuthorized,
+    setVisitInformation,
+  } = useStore();
+
+  useEffect(() => {
+    return () => {
+      setForm(null);
+      setShowForm(false);
+      setEmail(null);
+      setPersonalInformation(null);
+      setAuthorized(false);
+      setVisitInformation(null);
+    };
+  }, []);
+
   return (
     <div className='space-y-6'>
       <div className='flex justify-center'>

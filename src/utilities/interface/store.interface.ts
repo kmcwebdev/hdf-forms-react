@@ -1,8 +1,8 @@
 import { FormState } from '../enum/form-state.enum';
-import { WorkType } from '../enum/work-type.enum';
 import { PersonalInformation } from './personal-information.interface';
 import { QResponse } from './question.interface';
 import { VisitInformation } from './visit-information.interface';
+import { WorkType } from './work-type.interface';
 
 export interface Store {
   // States
@@ -18,7 +18,7 @@ export interface Store {
   authorized: boolean;
   siteId: number;
   floorId: number;
-  workLocation: WorkType | null;
+  workType: WorkType | null;
 
   // Actions
   setEmail: (email: string | null) => void;
@@ -35,5 +35,5 @@ export interface Store {
   setAuthorized: (authorize: boolean) => void;
   setSiteId: (siteId: number) => void;
   setFloorId: (floorId: number) => void;
-  setWorkLocation: (workLocation: WorkType | null) => void;
+  setWorkType: (workType: WorkType | null) => void;
 }
