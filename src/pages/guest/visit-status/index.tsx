@@ -11,6 +11,7 @@ const VisitStatus: React.FC = () => {
     setShowForm,
     setEmail,
     setPersonalInformation,
+    setWorkType,
     setAuthorized,
     setVisitInformation,
   } = useStore();
@@ -21,6 +22,7 @@ const VisitStatus: React.FC = () => {
       setShowForm(false);
       setEmail(null);
       setPersonalInformation(null);
+      setWorkType(null);
       setAuthorized(false);
       setVisitInformation(null);
     };
