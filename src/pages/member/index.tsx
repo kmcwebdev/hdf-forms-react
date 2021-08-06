@@ -1,16 +1,21 @@
-import { Button, Form, Space, Steps } from 'antd';
+import { Button, Form, message, Space, Steps } from 'antd';
 import classnames from 'classnames';
 import { Fragment, useEffect, useRef, useState } from 'react';
+import { useMutation } from 'react-query';
 import EmailChecker from 'src/components/Email-checker';
 import HealthDeclaration from 'src/components/Health-declaration';
 import PersonalInformation from 'src/components/Personal-information';
 import { Text } from 'src/components/Text';
 import VisitInformation from 'src/components/Visit-information';
+import { MemberAPI } from 'src/services/api/member.api';
+import { HttpError } from 'src/services/http.service';
 import { useStore } from 'src/store';
+import { ApiError } from 'src/utilities/api-error.utils';
 import { FormState } from 'src/utilities/enum/form-state.enum';
 import { PersonalInformation as IPersonalInformation } from 'src/utilities/interface/personal-information.interface';
 import { VisitInformation as IVisitInformation } from 'src/utilities/interface/visit-information.interface';
 import { sanitizeObjProperty } from 'src/utilities/sanitize-obj-property.utils';
+import VisitStatus from './visit-status';
 import WorkType from './work-type';
 
 const { Step } = Steps;
@@ -73,6 +78,23 @@ const Member: React.FC = () => {
     },
   ];
 
+  const { mutateAsync, isLoading: isLoadingCreateMemberVisit } = useMutation(
+    MemberAPI.createVisit,
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setResultLoading(true);
+          btnLoadingTimeout.current = setTimeout(() => {
+            setStepsDone(true);
+          }, 2500);
+        }
+      },
+      onError: (error: HttpError) => {
+        message.error(ApiError(error));
+      },
+    }
+  );
+
   async function next() {
     await form.validateFields();
 
@@ -118,7 +140,7 @@ const Member: React.FC = () => {
       authorized: undefined,
     });
 
-    console.log(payload);
+    await mutateAsync(payload);
   }
 
   return (
@@ -129,6 +151,7 @@ const Member: React.FC = () => {
           'md:w-2/4': !showForm,
         })}
       >
+        {stepsDone && <VisitStatus />}
         {!showForm && !stepsDone && (
           <Fragment>
             <Text className='text-2xl font-bold text-kmc-orange'>
@@ -169,7 +192,7 @@ const Member: React.FC = () => {
               {current === steps.length - 1 && (
                 <Button
                   type='primary'
-                  loading={resultLoading}
+                  loading={isLoadingCreateMemberVisit || resultLoading}
                   onClick={createMemberVisit}
                 >
                   Submit
