@@ -54,7 +54,7 @@ const WorkType: React.FC = () => {
           >
             {({ checked }) => (
               <>
-                <div className='flex items-center'>
+                <div className='flex items-center justify-center md:justify-center'>
                   <div className='text-sm'>
                     <RadioGroup.Label
                       as='p'
@@ -66,7 +66,7 @@ const WorkType: React.FC = () => {
                 </div>
                 <RadioGroup.Description
                   as='div'
-                  className='flex mt-2 text-sm sm:mt-0 sm:block sm:ml-4 sm:text-right'
+                  className='flex items-center justify-center mt-2 md:justify-start md:items-start sm:mt-0'
                 >
                   <Image
                     height={100}
