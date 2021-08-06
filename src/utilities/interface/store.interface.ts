@@ -17,7 +17,7 @@ export interface Store {
   hdfQ4: QResponse;
   authorized: boolean;
   siteId: number;
-  floorId: number;
+  floorId: number; // Unused
   workType: WorkType | null;
 
   // Actions

@@ -14,7 +14,13 @@ interface VisitInformationProps {
 }
 
 const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
-  const { form: pathState, workType, siteId, setSiteId } = useStore();
+  const {
+    form: pathState,
+    workType,
+    siteId,
+    setSiteId,
+    setFloorId,
+  } = useStore();
 
   const NOT_WFH_OR_ON_LEAVE =
     workType?.type !== 'Working from home' && workType?.type !== 'On leave';
@@ -71,7 +77,15 @@ const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
               { required: true, message: 'Please select a branch floor!' },
             ]}
           >
-            <Select className='w-full' loading={isLoadingFloors}>
+            <Select
+              className='w-full'
+              onChange={(_: number, options) => {
+                const { value } = options as { value: number };
+
+                setFloorId(value);
+              }}
+              loading={isLoadingFloors}
+            >
               {floors?.map((data) => (
                 <Option key={data.floorId} value={data.floorId}>
                   {data.floor}
