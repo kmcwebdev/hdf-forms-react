@@ -56,7 +56,7 @@ const VisitStatus: React.FC = () => {
             DOWNLOAD RESULT
           </Button>
           <Button className='w-48' type='primary'>
-            ADD YOU TEMPERATURE
+            ADD YOUR TEMPERATURE
           </Button>
         </div>
         <Text>
