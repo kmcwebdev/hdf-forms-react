@@ -1,6 +1,6 @@
 import { Button, Form, message, Space, Steps } from 'antd';
 import classnames from 'classnames';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useMutation } from 'react-query';
 import EmailChecker from 'src/components/Email-checker';
 import HealthDeclaration from 'src/components/Health-declaration';
@@ -45,12 +45,6 @@ const Member: React.FC = () => {
     setTimeout(() => null, 100)
   );
 
-  useEffect(() => {
-    console.log(setStepsDone);
-    console.log(setResultLoading);
-    console.log(btnLoadingTimeout);
-  }, []);
-
   const steps = [
     {
       title: <Text className='text-xs'>Personal details</Text>,
@@ -78,22 +72,23 @@ const Member: React.FC = () => {
     },
   ];
 
-  const { mutateAsync, isLoading: isLoadingCreateMemberVisit } = useMutation(
-    MemberAPI.createVisit,
-    {
-      onSuccess: (data) => {
-        if (data) {
-          setResultLoading(true);
-          btnLoadingTimeout.current = setTimeout(() => {
-            setStepsDone(true);
-          }, 2500);
-        }
-      },
-      onError: (error: HttpError) => {
-        message.error(ApiError(error));
-      },
-    }
-  );
+  const {
+    mutateAsync,
+    isLoading: isLoadingCreateMemberVisit,
+    data: memberVisit,
+  } = useMutation(MemberAPI.createVisit, {
+    onSuccess: (data) => {
+      if (data) {
+        setResultLoading(true);
+        btnLoadingTimeout.current = setTimeout(() => {
+          setStepsDone(true);
+        }, 2500);
+      }
+    },
+    onError: (error: HttpError) => {
+      message.error(ApiError(error));
+    },
+  });
 
   async function next() {
     await form.validateFields();
@@ -151,7 +146,9 @@ const Member: React.FC = () => {
           'md:w-2/4': !showForm,
         })}
       >
-        {stepsDone && <VisitStatus />}
+        {stepsDone && (
+          <VisitStatus isClear={memberVisit?.visitorStatus.isClear} />
+        )}
         {!showForm && !stepsDone && (
           <Fragment>
             <Text className='text-2xl font-bold text-kmc-orange'>
