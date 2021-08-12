@@ -9,6 +9,7 @@ const Home = lazy(() => import('./Home'));
 const Member = lazy(() => import('./member'));
 const Event = lazy(() => import('./event'));
 const Guest = lazy(() => import('./guest'));
+const PdfResult = lazy(() => import('./pdf-result'));
 
 const Routes: React.FC = () => {
   const { setForm } = useStore();
@@ -40,6 +41,7 @@ const Routes: React.FC = () => {
         <Route path='/member' component={Member} />
         <Route path='/event' component={Event} />
         <Route path='/guest' component={Guest} />
+        <Route path='/pdf-result' component={PdfResult} />
         <Route
           path='/not-found'
           component={() => (

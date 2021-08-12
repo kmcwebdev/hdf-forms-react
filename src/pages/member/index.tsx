@@ -72,23 +72,22 @@ const Member: React.FC = () => {
     },
   ];
 
-  const {
-    mutateAsync,
-    isLoading: isLoadingCreateMemberVisit,
-    data: memberVisit,
-  } = useMutation(MemberAPI.createVisit, {
-    onSuccess: (data) => {
-      if (data) {
-        setResultLoading(true);
-        btnLoadingTimeout.current = setTimeout(() => {
-          setStepsDone(true);
-        }, 2500);
-      }
-    },
-    onError: (error: HttpError) => {
-      message.error(ApiError(error));
-    },
-  });
+  const { mutateAsync, isLoading: isLoadingCreateMemberVisit } = useMutation(
+    MemberAPI.createVisit,
+    {
+      onSuccess: (data) => {
+        if (data) {
+          setResultLoading(true);
+          btnLoadingTimeout.current = setTimeout(() => {
+            setStepsDone(true);
+          }, 2500);
+        }
+      },
+      onError: (error: HttpError) => {
+        message.error(ApiError(error));
+      },
+    }
+  );
 
   async function next() {
     await form.validateFields();
@@ -146,9 +145,7 @@ const Member: React.FC = () => {
           'md:w-2/4': !showForm,
         })}
       >
-        {stepsDone && (
-          <VisitStatus isClear={memberVisit?.visitorStatus.isClear} />
-        )}
+        {stepsDone && <VisitStatus />}
         {!showForm && !stepsDone && (
           <Fragment>
             <Text className='text-2xl font-bold text-kmc-orange'>

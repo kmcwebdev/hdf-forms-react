@@ -56,11 +56,16 @@ const VisitInformation: React.FC<VisitInformationProps> = ({ form }) => {
           >
             <Select
               className='w-full'
+              showSearch
               onChange={(_: number, options) => {
                 const { value } = options as { value: number };
 
                 setSiteId(value);
               }}
+              optionFilterProp='children'
+              filterOption={(input, option) =>
+                option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
               loading={isLoadingSites}
             >
               {sites?.map((site) => (

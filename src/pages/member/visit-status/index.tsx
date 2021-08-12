@@ -5,11 +5,7 @@ import { Link as ReactRouterDomLink } from 'react-router-dom';
 import { Text } from 'src/components/Text';
 import { useStore } from 'src/store';
 
-interface VisitStatusProps {
-  isClear: boolean | undefined;
-}
-
-const VisitStatus: React.FC<VisitStatusProps> = ({ isClear }) => {
+const VisitStatus: React.FC = () => {
   const {
     setForm,
     setShowForm,
@@ -55,16 +51,14 @@ const VisitStatus: React.FC<VisitStatusProps> = ({ isClear }) => {
           clicking the link sent to your email or by accessing it thru the
           button below.
         </p>
-        {isClear && (
-          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-            <Button className='w-48' type='primary'>
-              DOWNLOAD RESULT
-            </Button>
-            <Button className='w-48' type='primary'>
-              ADD YOUR TEMPERATURE
-            </Button>
-          </div>
-        )}
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <Button className='w-48' type='primary'>
+            DOWNLOAD RESULT
+          </Button>
+          <Button className='w-48' type='primary'>
+            ADD YOUR TEMPERATURE
+          </Button>
+        </div>
         <Text>
           Email{' '}
           <Text className='cursor-pointer text-kmc-orange'>

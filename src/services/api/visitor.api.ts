@@ -13,4 +13,15 @@ export class VisitorAPI {
 
     return checkEmail.data;
   }
+
+  static async currentVisit(visitId: string) {
+    const currentVisit = await makeRequest({
+      url: '/api/visitors/visits/current',
+      params: {
+        visitId,
+      },
+    });
+
+    return currentVisit.data;
+  }
 }
