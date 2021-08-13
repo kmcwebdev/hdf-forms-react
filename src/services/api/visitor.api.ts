@@ -1,3 +1,4 @@
+import { CurrentVisit } from 'src/utilities/interface/current-visit.interface';
 import { Visitor } from 'src/utilities/interface/visitor.interface';
 import { makeRequest } from '../http.service';
 
@@ -15,7 +16,7 @@ export class VisitorAPI {
   }
 
   static async currentVisit(visitId: string) {
-    const currentVisit = await makeRequest({
+    const currentVisit = await makeRequest<CurrentVisit>({
       url: '/api/visitors/visits/current',
       params: {
         visitId,

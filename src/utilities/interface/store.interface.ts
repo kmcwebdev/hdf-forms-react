@@ -18,6 +18,7 @@ export interface Store {
   authorized: boolean;
   siteId: number;
   floorId: number; // Unused
+  visitId: string | null;
   workType: WorkType | null;
 
   // Actions
@@ -35,5 +36,6 @@ export interface Store {
   setAuthorized: (authorize: boolean) => void;
   setSiteId: (siteId: number) => void;
   setFloorId: (floorId: number) => void;
+  setVisitId: (visitId: string | null) => void;
   setWorkType: (workType: WorkType | null) => void;
 }

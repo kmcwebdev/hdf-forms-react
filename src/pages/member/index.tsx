@@ -34,6 +34,7 @@ const Member: React.FC = () => {
     hdfQ4,
     authorized,
     showForm,
+    setVisitId,
     form: pathState,
   } = useStore();
   const [form] = Form.useForm();
@@ -76,8 +77,9 @@ const Member: React.FC = () => {
     MemberAPI.createVisit,
     {
       onSuccess: (data) => {
-        if (data) {
+        if (Object.keys(data).length) {
           setResultLoading(true);
+          setVisitId(data.visitId);
           btnLoadingTimeout.current = setTimeout(() => {
             setStepsDone(true);
           }, 2500);

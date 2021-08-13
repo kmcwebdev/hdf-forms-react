@@ -15,6 +15,7 @@ export const useStore = create<Store>((set) => ({
   authorized: false,
   siteId: 0,
   floorId: 0,
+  visitId: null,
   workType: null,
 
   // Actions
@@ -48,11 +49,14 @@ export const useStore = create<Store>((set) => ({
   setAuthorized: (authorize) => {
     return set((state) => ({ ...state, authorized: authorize }));
   },
-  setSiteId: (siteId: number) => {
+  setSiteId: (siteId) => {
     return set((state) => ({ ...state, siteId }));
   },
-  setFloorId: (floorId: number) => {
+  setFloorId: (floorId) => {
     return set((state) => ({ ...state, floorId }));
+  },
+  setVisitId: (visitId) => {
+    return set((state) => ({ ...state, visitId }));
   },
   setWorkType: (workType) => {
     return set((state) => ({ ...state, workType }));

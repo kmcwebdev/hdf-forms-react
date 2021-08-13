@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Image } from 'antd';
 import { useEffect } from 'react';
-import { Link as ReactRouterDomLink } from 'react-router-dom';
+import { Link, Link as ReactRouterDomLink } from 'react-router-dom';
 import { Text } from 'src/components/Text';
 import { useStore } from 'src/store';
 
@@ -14,6 +14,8 @@ const VisitStatus: React.FC = () => {
     setWorkType,
     setAuthorized,
     setVisitInformation,
+    visitId,
+    setVisitId,
   } = useStore();
 
   useEffect(() => {
@@ -25,6 +27,7 @@ const VisitStatus: React.FC = () => {
       setWorkType(null);
       setAuthorized(false);
       setVisitInformation(null);
+      setVisitId(null);
     };
   }, []);
 
@@ -52,9 +55,11 @@ const VisitStatus: React.FC = () => {
           button below.
         </p>
         <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-          <Button className='w-48' type='primary'>
-            DOWNLOAD RESULT
-          </Button>
+          <Link to={`/pdf-result?visitId=${visitId}`}>
+            <Button className='w-48' type='primary'>
+              DOWNLOAD RESULT
+            </Button>
+          </Link>
           <Button className='w-48' type='primary'>
             ADD YOUR TEMPERATURE
           </Button>
