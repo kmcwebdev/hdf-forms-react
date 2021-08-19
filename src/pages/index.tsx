@@ -3,14 +3,9 @@ import Layout from 'src/components/Layout';
 import Routes from './Routes';
 
 const validRoutes = () => {
-  return [
-    '/home',
-    '/member',
-    '/event',
-    '/guest',
-    '/pdf-result',
-    '/not-found',
-  ].includes(window.location.pathname);
+  return ['/home', '/member', '/guest', '/pdf-result', '/not-found'].includes(
+    window.location.pathname
+  );
 };
 
 const Pages: React.FC = () => {

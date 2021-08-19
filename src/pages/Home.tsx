@@ -39,7 +39,12 @@ const Dashboard: React.FC = () => {
             src='https://kmc-s3.sgp1.cdn.digitaloceanspaces.com/HDF/static/event.svg'
           />
           <Link to='/event'>
-            <Button className='font-bold w-52 ' type='primary' size='large'>
+            <Button
+              className='font-bold w-52 '
+              type='primary'
+              disabled
+              size='large'
+            >
               Event
             </Button>
           </Link>
