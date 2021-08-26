@@ -3,6 +3,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { useEffect } from 'react';
 import { useStore } from 'src/store';
 import { PersonalInformation as IPersonalInformation } from 'src/utilities/interface/personal-information.interface';
+import { mailDomainIs } from 'src/utilities/mail-domain-is.utils';
 import { DatePicker } from './datetime';
 
 interface PersonalInformationProps {
@@ -17,14 +18,15 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ form }) => {
       const { firstName, lastName, email, phoneNumber, address, company } =
         personalInformation;
 
-      form.setFieldsValue({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        address,
-        company,
-      });
+      if (mailDomainIs(email!, 'kmc.solutions'))
+        form.setFieldsValue({
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          address,
+          company,
+        });
     }
   }, [form, personalInformation]);
 
