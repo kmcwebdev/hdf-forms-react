@@ -2393,10 +2393,10 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-antd@^4.16.12:
-  version "4.16.12"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-4.16.12.tgz#8d32a1ad6a80fd2ea61e6f1c432b31782fd2cd50"
-  integrity sha512-vFptOyOo0EubF6sgdJdH8GwnphcZcxV2QG+znSUj4hMOzRI8a0p3XS2mvKpsS92bu4PBuvsc9wmNQNnOfh1GrA==
+antd@^4.16.13:
+  version "4.16.13"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-4.16.13.tgz#e9b9b4a590db28747aae1cab98981649a35880af"
+  integrity sha512-EMPD3fzKe7oayx9keD/GA1oKatcx7j5CGlkJj5eLS0/eEDDEkxVj3DFmKOPuHYt4BK7ltTzMFS+quSTmqUXPiw==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/icons" "^4.6.3"
@@ -10112,10 +10112,10 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
-react-query@^3.19.6:
-  version "3.19.6"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.19.6.tgz#02bda891a3f0a0534934d9024350d655b268e82c"
-  integrity sha512-21WfvDgBXvPzJtG4gAxi0h6ipOUNPKZGR3vZJ17m/kHGbj9g6rPblc0lG4sY5oVLpM05LP+BdDt/IYfy0IIKmg==
+react-query@^3.21.0:
+  version "3.21.0"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.21.0.tgz#2e099a7906c38eeeb750e8b9b12121a21fa8d9ef"
+  integrity sha512-5rY5J8OD9f4EdkytjSsdCO+pqbJWKwSIMETfh/UyxqyjLURHE0IhlB+IPNPrzzu/dzK0rRxi5p0IkcCdSfizDQ==
   dependencies:
     "@babel/runtime" "^7.5.5"
     broadcast-channel "^3.4.1"
