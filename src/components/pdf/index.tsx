@@ -83,8 +83,8 @@ const Pdf: React.FC<PdfProps> = ({ data }) => {
                 <Text>
                   Date of Visit:{' '}
                   <Text className='font-bold'>
-                    {format(new Date(data.dateCreated), 'eeee, MMMM dd, yyyy')}{' '}
-                    {format(new Date(data.timeCreated), 'hh:mm a')}
+                    {format(new Date(), 'eeee, MMMM dd, yyyy')}{' '}
+                    {format(new Date(), 'hh:mm a')}
                   </Text>
                 </Text>
               </Fragment>
