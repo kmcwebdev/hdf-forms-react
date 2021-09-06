@@ -1,6 +1,7 @@
-import { Result as AntdResult } from 'antd';
+import { Button, Result as AntdResult } from 'antd';
 import classnames from 'classnames';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Text } from './Text';
 
 interface ResultsProps {
@@ -27,9 +28,12 @@ const Result: React.FC<ResultsProps> = ({
   subTitle,
   screenHeight: heightFull,
 }) => {
-  const resultClassNames = classnames('flex items-center justify-center', {
-    'h-screen': heightFull,
-  });
+  const resultClassNames = classnames(
+    'flex items-center justify-center gap-y-4',
+    {
+      'h-screen': heightFull,
+    }
+  );
 
   return (
     <div className={resultClassNames}>
@@ -42,6 +46,9 @@ const Result: React.FC<ResultsProps> = ({
           </Text>
         }
       />
+      <Link to='/member'>
+        <Button type='primary'>Go Back</Button>
+      </Link>
     </div>
   );
 };
