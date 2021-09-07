@@ -29,11 +29,13 @@
     "zustand": "^3.5.7"
   },
   "scripts": {
-    "start": "yarn build:css && craco start",
-    "build": "NODE_ENV=production yarn build:css && GENERATE_SOURCEMAP=false craco build",
-    "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
+    "start": "craco start",
+    "build": "NODE_ENV=production yarn watch:css && GENERATE_SOURCEMAP=false craco build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "watch:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
+    "watch": "chokidar \"./src/**/*.tsx\" -c \"yarn watch:css\"",
+    "dev": "concurrently \"yarn watch\" \"yarn start\""
   },
   "eslintConfig": {
     "extends": [

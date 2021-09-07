@@ -29,7 +29,7 @@ const Result: React.FC<ResultsProps> = ({
   screenHeight: heightFull,
 }) => {
   const resultClassNames = classnames(
-    'flex items-center justify-center gap-y-4',
+    'flex flex-col items-center justify-center',
     {
       'h-screen': heightFull,
     }
