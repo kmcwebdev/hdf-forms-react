@@ -46,7 +46,7 @@ const Result: React.FC<ResultsProps> = ({
           </Text>
         }
       />
-      <Link to='/member'>
+      <Link to='/home'>
         <Button type='primary'>Go Back</Button>
       </Link>
     </div>
