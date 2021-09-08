@@ -132,7 +132,7 @@ const Pdf: React.FC<PdfProps> = ({ data }) => {
               </Text>
             </Text>
           </Space>
-          <Space direction='vertical'>
+          <Space className='ml-0 md:ml-6' direction='vertical'>
             <Space>
               <Text className='text-base font-bold'>Health Information</Text>
             </Space>
