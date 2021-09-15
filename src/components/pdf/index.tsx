@@ -10,6 +10,8 @@ interface PdfProps {
 }
 
 const Pdf: React.FC<PdfProps> = ({ data }) => {
+  console.log(data);
+
   return (
     <div className='space-y-6'>
       {Object.keys(data!).length < 1 && (
